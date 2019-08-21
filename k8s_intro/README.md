@@ -116,3 +116,30 @@ $ kubectl rollout history deployment echo --revision=1
 $kubectl rollout undo deployment echo
 deployment.extensions/echo rolled back
 ```
+
+## Service
+
+* Serviceは、Podの集合(主にReplicaSet)に対する経路やサービスディスカバリを提供する
+
+
+```
+$ kubectl apply -f simple-service.yaml
+service/echo created
+
+$ kubectl get svc echo
+NAME   TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+echo   ClusterIP   10.101.121.245   <none>        80/TCP    11s
+```
+
+#### クラスタ内の命名規則
+
+`サービス名.ネームスペース.svc.local`
+`svc.local`は省略が可能
+同じネームスペースなら`ネームスペース`も省略が可能
+
+#### サービスの種類
+
+* ClusterIP Service: デフォルトのサービス。k8sクラスタ上の内部IPアドレスにサービスを公開できる。あるPodから別のPodへアクセスができるようになる
+* NodePort Service: クラスタ外からアクセスできるサービス。内部的にはClusterIPを作っているが、グローバルなポートをあけていることで外からもアクセスできるようになる
+* LoadBalancer Service: クラウドプラットフォームで提供されているLBと連携するためのもの。ローカルのk8s環境では利用できない
+* ExternalName Service: k8sクラスタ内から外部のホストを解決するためのエイリアスを提供する。
