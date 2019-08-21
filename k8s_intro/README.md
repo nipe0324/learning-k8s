@@ -70,4 +70,49 @@ replicaset.apps "echo" deleted
 ## Deployment
 
 * Deploymentはアプリケーションデプロイの基本単位となるリソース。
+* 新しいバージョンへのPodへの入れ替え、以前のバージョンへのPodのロールバック、指定されたPod数の確保などを実行する
 * ReplicaSetより上位のリソース（Deployment - create -> ReplicaSet - create -> Pods)
+
+* Apply deployment
+
+```
+$ kubectl apply -f sample-deployment.yaml --record
+```
+
+* Get Resources
+
+```
+$ kubectl get pod,replicaset,deployment --selector app=echo 
+NAME                        READY   STATUS    RESTARTS   AGE
+pod/echo-679c46ddf9-fq2hj   2/2     Running   0          30s
+pod/echo-679c46ddf9-ssj8r   2/2     Running   0          30s
+pod/echo-679c46ddf9-vwcmh   2/2     Running   0          30s
+
+NAME                                    DESIRED   CURRENT   READY   AGE
+replicaset.extensions/echo-679c46ddf9   3         3         3       30s
+
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.extensions/echo   3/3     3            3           30s
+```
+
+* Get Deployment Revision History
+
+```
+$ kubectl rollout history deployment echo
+deployment.extensions/echo 
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=sample-deployment.yaml --record=true
+```
+
+* Show deployment revision detail
+
+```
+$ kubectl rollout history deployment echo --revision=1
+```
+
+* Rollback ddeployment revision
+
+```
+$kubectl rollout undo deployment echo
+deployment.extensions/echo rolled back
+```
