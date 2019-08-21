@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: echo
-    release: summer
+    # release: summer
   ports:
     - name: http
       port: 80

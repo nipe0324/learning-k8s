@@ -143,3 +143,36 @@ echo   ClusterIP   10.101.121.245   <none>        80/TCP    11s
 * NodePort Service: クラスタ外からアクセスできるサービス。内部的にはClusterIPを作っているが、グローバルなポートをあけていることで外からもアクセスできるようになる
 * LoadBalancer Service: クラウドプラットフォームで提供されているLBと連携するためのもの。ローカルのk8s環境では利用できない
 * ExternalName Service: k8sクラスタ内から外部のホストを解決するためのエイリアスを提供する。
+
+
+## Ingress
+
+* Ingressは、ServiceのL7層レベルのk8sクラスタの外への公開、VirtualHostやパスベースでの高度なHTTPルーティングをおこなう
+* 素の状態のローカルk8s環境ではIngressを使ったServicの公開はdけいないので、nginx_ingress_controllerを挟む必要がある
+
+```
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.16.2/deploy/mandatory.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.16.2/deploy/provider/cloud-generic.yaml
+
+$ kubectl -n ingress-nginx get service,pod
+NAME                           TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+service/default-http-backend   ClusterIP      10.110.135.60   <none>        80/TCP                       83s
+service/ingress-nginx          LoadBalancer   10.97.254.170   localhost     80:31339/TCP,443:31337/TCP   24s
+
+NAME                                           READY   STATUS    RESTARTS   AGE
+pod/default-http-backend-55b84578bf-lmkj8      1/1     Running   0          83s
+pod/nginx-ingress-controller-b5d545f8f-d7jj4   1/1     Running   0          83s
+```
+
+* Ingress
+
+```
+$ kubectl apply -f simple-ingress.yaml
+ingress.extensions/echo created
+
+$ kubectl get ingress
+NAME   HOSTS              ADDRESS   PORTS   AGE
+echo   ch05.gihyo.local             80      28s
+
+$ curl http://localhost -H 'Host: ch05.gihyo.local'                                                                                                                          Hello Docker!!
+```
