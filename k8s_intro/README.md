@@ -218,3 +218,29 @@ NAME                        COMPLETIONS   DURATION   AGE
 pingpong-batch-1568206320   1/1           13s        111s
 pingpong-batch-1568206380   1/1           13s        51s
 ```
+
+* Secret
+
+```
+$ echo "myusername:$(openssl passwd -quiet -crypt mypassword)" | base64
+bXl1c2VybmFtZTpBM0ZZLmVvREQxRE5BCg==
+
+$ kubectl apply -f simple-nginx-secret.yaml
+secret/nginx-server created
+
+$ kubectl get secret nginx-secret
+NAME           TYPE     DATA   AGE
+nginx-secret   Opaque   1      13m
+
+$ kubectl apply -f simple-nginx-basicauth.yaml
+service/basicauth created
+deployment.apps/basicauth created
+
+$ kubectl get service basicauth
+NAME        TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+basicauth   NodePort   10.104.139.198   <none>        80:30060/TCP   37s
+
+$ curl http://127.0.0.1:30060
+
+$ curl -i --user myusername:mypassword http://127.0.0.1:30060
+```
