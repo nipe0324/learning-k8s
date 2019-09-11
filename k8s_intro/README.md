@@ -174,5 +174,47 @@ $ kubectl get ingress
 NAME   HOSTS              ADDRESS   PORTS   AGE
 echo   ch05.gihyo.local             80      28s
 
-$ curl http://localhost -H 'Host: ch05.gihyo.local'                                                                                                                          Hello Docker!!
+$ curl http://localhost -H 'Host: ch05.gihyo.local'
+Hello Docker!!
+```
+
+## Advanced
+
+* Job
+
+```
+$ kubectl apply -f sample-job.yaml
+job.batch/pingpong created
+
+$ kubectl logs -l app=pingpong
+[Wed Sep 11 12:41:36 UTC 2019] ping!
+[Wed Sep 11 12:41:46 UTC 2019] pong!
+[Wed Sep 11 12:41:31 UTC 2019] ping!
+[Wed Sep 11 12:41:41 UTC 2019] pong!
+[Wed Sep 11 12:41:33 UTC 2019] ping!
+[Wed Sep 11 12:41:43 UTC 2019] pong!
+
+$ kubectl get pod -l app=pingpong
+NAME             READY   STATUS      RESTARTS   AGE
+pingpong-5whvn   0/1     Completed   0          5m21s
+pingpong-94nxw   0/1     Completed   0          5m21s
+pingpong-g4jxt   0/1     Completed   0          5m21s
+```
+
+* CronJob
+
+```
+$ kubectl apply -f simple-cronjob.yaml
+cronjob.batch/pingpong-batch created
+
+$ kubectl logs -l app=pingpong-batch
+[Wed Sep 11 12:52:02 UTC 2019] ping!
+[Wed Sep 11 12:52:12 UTC 2019] pong!
+[Wed Sep 11 12:53:02 UTC 2019] ping!
+[Wed Sep 11 12:53:12 UTC 2019] pong!
+
+$ kubectl get job -l app=pingpong-batch
+NAME                        COMPLETIONS   DURATION   AGE
+pingpong-batch-1568206320   1/1           13s        111s
+pingpong-batch-1568206380   1/1           13s        51s
 ```

@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: pingpong-batch
+  labels:
+    app: pingpong-batch
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: pingpong-batch
+        spec:
+          containers:
+          - name: pingpong-batch
+            image: gihyodocker/alpine:bash
+            command: [ "bin/sh" ]
+            args:
+              - "-c"
+              - |
+                echo [`date`] ping!
+                sleep 10
+                echo [`date`] pong!
+          # NeverかOnFailureのどちらかを設定する必要あり
+          restartPolicy: OnFailure
