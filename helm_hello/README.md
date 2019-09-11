@@ -104,5 +104,29 @@ $ helm delete redmine
 $ helm ls --all
 
 # Purge
-$ helm del --purge redine
+$ helm del --purge redmine
+```
+
+## Original Chart
+
+```
+$ helm repo list
+NAME    URL                                             
+stable  https://kubernetes-charts.storage.googleapis.com
+local   http://127.0.0.1:8879/charts
+
+# Run local repo server
+$ helm serve &
+
+$ helm create echo
+Creating echo
+
+$ helm package echo
+Successfully packaged chart and saved it to: /.../helm_hello/echo-0.1.0.tgz
+
+$ helm search echo
+NAME            CHART VERSION   APP VERSION     DESCRIPTION                
+local/echo      0.1.0           1.0             A Helm chart for Kubernetes
+
+$ helm install -f local-echo.yaml --name echo local/echo
 ```
