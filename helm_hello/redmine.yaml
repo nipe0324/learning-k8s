@@ -1,0 +1,6 @@
+redmineUsername: foo
+redminePassword: foo
+redmineLanguae: ja
+
+serviceType: NodePort
+
