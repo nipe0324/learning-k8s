@@ -1,0 +1,74 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: front-end
+  namespace: sock-shop-with-mesh
+spec:
+  host: front-end
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: carts
+  namespace: sock-shop-with-mesh
+spec:
+  host: carts
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: catalogue
+  namespace: sock-shop-with-mesh
+spec:
+  host: catalogue
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: user
+  namespace: sock-shop-with-mesh
+spec:
+  host: user
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: payment
+  namespace: sock-shop-with-mesh
+spec:
+  host: payment
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: orders
+  namespace: sock-shop-with-mesh
+spec:
+  host: orders
+  subsets:
+  - name: v1
+    labels:
+      version: v1
